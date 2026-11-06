@@ -1,0 +1,46 @@
+---
+import Base from '../../layouts/Base.astro';
+import { articleHref, articleTypeLabels, formatDate, getArticles } from '../../lib/articles';
+
+const articles = await getArticles();
+---
+
+<Base
+  title="Articles"
+  description="Engineering notes, case studies, and research articles on agentic software engineering."
+  current="articles"
+>
+  <main id="main">
+    <div class="in">
+      <div class="ahead wide">
+        <h1>Articles</h1>
+        <p class="desc">Engineering notes, case studies, and research articles on agentic software engineering.</p>
+      </div>
+    </div>
+    <section class="s journal">
+      <div class="in">
+        <h2 class="sec">Engineering journal</h2>
+        <div class="toc">
+          {articles.length === 0 && <p class="empty">The first article is being prepared.</p>}
+          {
+            articles.map((article) => (
+              <a class="item" href={articleHref(article)}>
+                <span class="kind">{articleTypeLabels[article.data.type]}</span>
+                {article.data.publishedAt && (
+                  <time class="date" datetime={article.data.publishedAt.toISOString()}>
+                    {formatDate(article.data.publishedAt)}
+                  </time>
+                )}
+                {article.data.draft && <span class="draftmark">Draft</span>}
+                <div class="tx">
+                  <h3>{article.data.title}</h3>
+                  <p>{article.data.description}</p>
+                </div>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+  </main>
+</Base>

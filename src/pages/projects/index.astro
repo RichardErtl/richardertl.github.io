@@ -1,0 +1,37 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getProjects, projectHref, projectStatusLabels } from '../../lib/projects';
+
+const projects = await getProjects();
+const description = 'A private system and an open-source tool for working with AI coding agents.';
+---
+
+<Base title="Projects" description={description} current="projects">
+  <main id="main">
+    <div class="in">
+      <div class="ahead wide">
+        <h1>Projects</h1>
+        <p class="desc">{description}</p>
+      </div>
+    </div>
+    <section class="s journal">
+      <div class="in">
+        <h2 class="sec">Selected projects</h2>
+        <div class="toc">
+          {
+            projects.map((project) => (
+              <a class="item" href={projectHref(project)}>
+                <span class="kind">{projectStatusLabels[project.data.status]}</span>
+                <div class="tx">
+                  <h3>{project.data.name}</h3>
+                  <p class="tag">{project.data.tagline}</p>
+                  <p>{project.data.summary}</p>
+                </div>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+  </main>
+</Base>

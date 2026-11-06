@@ -1,0 +1,87 @@
+---
+import { render } from 'astro:content';
+import { site } from '../../data/site';
+import Base from '../../layouts/Base.astro';
+import { articleHref, articleTypeLabels, formatDate, getArticles, type Article } from '../../lib/articles';
+
+export async function getStaticPaths() {
+  const articles = await getArticles();
+  return articles.map((article) => ({ params: { slug: article.id }, props: { article } }));
+}
+
+interface Props {
+  article: Article;
+}
+
+const { article } = Astro.props;
+const { title, description, type, draft, publishedAt, updatedAt } = article.data;
+const { Content } = await render(article);
+
+const image = `/social/${article.id}.png`;
+const url = new URL(articleHref(article), Astro.site);
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: title,
+  description,
+  url,
+  mainEntityOfPage: url,
+  image: new URL(image, Astro.site),
+  ...(publishedAt && { datePublished: publishedAt.toISOString() }),
+  ...(updatedAt && { dateModified: updatedAt.toISOString() }),
+  author: {
+    '@type': 'Person',
+    name: site.name,
+    url: new URL('/about/', Astro.site),
+    sameAs: [site.links.github, site.links.linkedin],
+  },
+};
+---
+
+<Base
+  title={title}
+  description={description}
+  current="articles"
+  image={image}
+  type="article"
+  publishedAt={publishedAt}
+  updatedAt={updatedAt}
+>
+  <script
+    is:inline
+    slot="head"
+    type="application/ld+json"
+    set:html={JSON.stringify(structuredData).replace(/</g, '\\u003c')}
+  />
+  <main id="main" class="in">
+    <article>
+      <div class="ahead">
+        <p class="kind">
+          {articleTypeLabels[type]}{draft && <span class="draftmark">Draft</span>}
+        </p>
+        <h1>{title}</h1>
+        <p class="desc">{description}</p>
+        {
+          (publishedAt || updatedAt) && (
+            <p class="dates">
+              {publishedAt && (
+                <>
+                  Published <time datetime={publishedAt.toISOString()}>{formatDate(publishedAt)}</time>
+                </>
+              )}
+              {publishedAt && updatedAt && ' · '}
+              {updatedAt && (
+                <>
+                  Updated <time datetime={updatedAt.toISOString()}>{formatDate(updatedAt)}</time>
+                </>
+              )}
+            </p>
+          )
+        }
+      </div>
+      <div class="prose">
+        <Content />
+      </div>
+    </article>
+  </main>
+</Base>

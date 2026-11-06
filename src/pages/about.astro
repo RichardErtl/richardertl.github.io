@@ -1,0 +1,180 @@
+---
+import { site } from '../data/site';
+import Base from '../layouts/Base.astro';
+
+const description =
+  'Software engineer and technical lead in Linz, Austria, working on agent infrastructure, multi-agent orchestration, and developer tooling.';
+---
+
+<Base title="About" description={description} current="about">
+  <main id="main">
+    <div class="in">
+      <div class="abouthead">
+        <div>
+          <h1>About</h1>
+          <p class="lede">
+            I am a software engineer and technical lead in Linz, Austria. My background is distributed production systems
+            and observability. Today I specialize in agent infrastructure, multi-agent orchestration, developer tooling,
+            and AI-native software engineering.
+          </p>
+          <p class="lede">
+            I design and operate human-in-the-loop agent systems with runtime guardrails and measurement-driven
+            optimization, and I publish open-source developer tooling for AI coding agents.
+          </p>
+          <a class="cta" href={site.links.linkedin}>Full profile on LinkedIn &rarr;</a>
+        </div>
+        <img
+          src="/images/about/richard-ertl.webp"
+          alt="Portrait of Richard Ertl, smiling, in a dark blazer over a white T-shirt, against a plain light wall"
+          width="800"
+          height="1000"
+        />
+      </div>
+    </div>
+
+    <section class="s" id="how-it-started">
+      <div class="in">
+        <h2 class="sec">How it started</h2>
+        <div class="story">
+          <p class="ask">
+            If AI agents are writing the code, why are we still working in environments designed for humans to write it?
+          </p>
+          <p>That's the question that started my journey a few months ago.</p>
+          <p>
+            I believe developer tools need to evolve as our role shifts from writing code to guiding, evaluating, and
+            improving AI-driven development.
+          </p>
+          <p>My approach follows three steps:</p>
+          <ol>
+            <li>Make it visible.</li>
+            <li>Make it measurable and comparable.</li>
+            <li>Optimize what matters.</li>
+          </ol>
+          <p>
+            It all starts with visibility. But how do we know what information matters before we can actually see it?
+            That's why I've been building flexible tools rather than fixed dashboards.
+          </p>
+          <p>
+            One of them is open source: <a href="/projects/aihud/">AIHUD</a>, a lightweight, highly customizable
+            heads-up display for AI coding agents. Choose what matters to you, customize your layout, or build your own
+            visualizations.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="s">
+      <div class="in">
+        <h2 class="sec">Areas of specialization</h2>
+        <div class="rg two">
+          <div>
+            <h3>Agentic AI and developer tooling</h3>
+            <p>Agent infrastructure, multi-agent systems, human-in-the-loop systems, runtime guardrails.</p>
+          </div>
+          <div>
+            <h3>Evaluation and optimization</h3>
+            <p>Observability, telemetry, tracing, evaluation gates, token and context optimization.</p>
+          </div>
+          <div>
+            <h3>Architecture and distributed systems</h3>
+            <p>Software architecture, control planes, task orchestration, state isolation, idempotent handovers.</p>
+          </div>
+          <div>
+            <h3>Machine learning</h3>
+            <p>Classical machine learning and deep learning.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="s path">
+      <div class="in">
+        <h2 class="sec">Experience</h2>
+        <ol class="tl long">
+          <li>
+            <b>2026</b>
+            <div>
+              <h3>Independent R&amp;D</h3>
+              <small>2026 to present</small>
+            </div>
+            <p>
+              <a href="/projects/systemprinter/">SystemPrinter</a>, a private agentic software engineering system, and{' '}
+              <a href="/projects/aihud/">AIHUD</a>, an open-source live display for AI coding agent sessions.
+            </p>
+          </li>
+          <li>
+            <b>2023</b>
+            <div>
+              <h3>Software Engineer, Project and Technical Lead</h3>
+              <small>Otelo eGen, March 2023 to September 2026</small>
+            </div>
+            <p>
+              TalentSpace, an interactive technology environment commissioned by the Upper Austrian Chamber of Commerce.
+              End-to-end technical responsibility for architecture, core software, hardware integration, delivery, and
+              operation of 14 stations with 200+ active services, leading a project team of five.
+            </p>
+          </li>
+          <li>
+            <b>2022</b>
+            <div>
+              <h3>Software Developer</h3>
+              <small>BMW Steyr, March 2022 to February 2023</small>
+            </div>
+            <p>
+              Contributed to a new process control system for the plant's conversion to Gen6 electric-drive production,
+              with web-based tooling in TypeScript to intercept, inspect, and modify Apache Flink messages on real plant
+              data streams.
+            </p>
+          </li>
+          <li>
+            <b>2014</b>
+            <div>
+              <h3>Automation Technician</h3>
+              <small>MAHLE Vöcklabruck, April 2014 to July 2019</small>
+            </div>
+            <p>
+              Industrial automation and PLC programming with Siemens SIMATIC technologies on the largest production line.
+            </p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="s">
+      <div class="in">
+        <h2 class="sec">Education</h2>
+        <div class="rg two">
+          <div>
+            <h3>MSc Mobile Computing</h3>
+            <p>
+              Graduated with distinction, 2025. University of Applied Sciences Upper Austria, Hagenberg Campus. Thesis on
+              the design, analysis, and optimization of a centralized real-time monitoring system for the distributed
+              TalentSpace platform.
+            </p>
+          </div>
+          <div>
+            <h3>BSc Automotive Computing</h3>
+            <p>
+              Graduated with distinction, 2022. University of Applied Sciences Upper Austria, Hagenberg Campus. Thesis on
+              parking-duration prediction and parking-space allocation using real-world data.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="s research">
+      <div class="in">
+        <h2 class="sec">Publication</h2>
+        <p class="cite">
+          Müller, A., Ertl, R., Gutenbrunner, S., Scheuchenpflug, M., and Ostermayer, G. (2026).{' '}
+          <a href={site.links.publication}
+            >Optimizing Parking Efficiency Using Parking Duration Prediction: A Case Study of a Shopping Mall Parking
+            Facility</a
+          >. Applied Sciences, 16(13), 6704. Peer-reviewed research derived from my Bachelor's thesis. DOI:
+          10.3390/app16136704.
+        </p>
+      </div>
+    </section>
+  </main>
+</Base>

@@ -1,0 +1,30 @@
+{
+  "name": "richardertl-site",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/markdown-satteri": "0.4.7",
+    "@astrojs/rss": "4.0.19",
+    "@astrojs/sitemap": "3.7.4",
+    "@fontsource-variable/cormorant-garamond": "5.3.0",
+    "@fontsource-variable/geist-mono": "5.3.0",
+    "@fontsource-variable/hanken-grotesk": "5.3.0",
+    "@fontsource-variable/newsreader": "5.3.0",
+    "astro": "7.4.7"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.12",
+    "@fontsource/cormorant-garamond": "5.3.0",
+    "satori": "0.63.2",
+    "sharp": "0.35.5",
+    "typescript": "6.0.3"
+  }
+}

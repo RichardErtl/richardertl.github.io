@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="868" viewBox="0 0 400 868" role="img" aria-labelledby="handover-title handover-desc" style="display:block;max-width:100%;height:auto">
+  <title id="handover-title">Separate history, continuation state, and startup context</title>
+  <desc id="handover-desc">This diagram shows the normal shutdown path and successor startup, rather than every available write path. An outgoing coding agent supplies a session account and continuation information. Shutdown code orchestrates record validation, metadata stamping, and separate persistence operations. It appends entries to a Session Journal and replaces the current Continuation Record for each machine and workstream. Accepted record bodies and rejected text are copied to the journal on this path, on a best-effort basis; other write paths can omit these journal updates. Journals remain editable through ordinary tools. At startup, code uses journal selection metadata and pending-item information, the selected continuation record and summaries of other workstreams, and operational context. This includes the current machine's claims and commits whose messages identify that device. The full journal is not loaded. The generated view has limits on individual sections, not a single bound on all startup output. Writes can fail independently and format checks do not verify semantic truth. A small shared summary and a legacy stub remain additional startup inputs.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="7" markerHeight="7" refX="7" refY="3.5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0 0 L7 3.5 L0 7 Z" fill="#62594E"/>
+    </marker>
+    <style>
+      text { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; fill: #29221B; font-variant-numeric: tabular-nums; }
+      .eyebrow { font-size: 12.5px; font-weight: 650; letter-spacing: 1px; }
+      .heading { font-size: 19px; font-weight: 650; letter-spacing: -0.3px; }
+      .title { font-size: 18px; font-weight: 650; letter-spacing: -0.2px; }
+      .body { font-size: 15px; font-weight: 400; }
+      .note { font-size: 14.5px; font-weight: 400; fill: #62594E; }
+      .count { font-size: 34px; font-weight: 700; letter-spacing: -1px; }
+      .op { font-size: 14.5px; font-weight: 500; fill: #62594E; }
+      .card { stroke-width: 1; }
+      .connector { fill: none; stroke: #62594E; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+  </defs>
+
+  <rect width="400" height="868" fill="#FDFAF3"/>
+  <text x="14" y="30" class="heading">History, state, and startup context</text>
+  <text x="14" y="52" class="note">Normal shutdown path and successor startup.</text>
+
+  <!-- The normal shutdown path orchestrates validation and persistence; other writing paths differ. -->
+  <g>
+    <rect x="28" y="66" width="344" height="102" rx="8" fill="#F8EFDD" stroke="#D9BE8C" class="card"/>
+    <text x="42" y="88" class="eyebrow" style="fill:#8A5510">MODEL</text>
+    <text x="42" y="110" class="title">Outgoing coding agent</text>
+    <text x="42" y="134" class="body">Session account +</text>
+    <text x="42" y="154" class="body">continuation information</text>
+  </g>
+  <path class="connector" d="M200 168 V192" marker-end="url(#arrow)"/>
+
+  <g>
+    <rect x="28" y="192" width="344" height="102" rx="8" fill="#E7F0EF" stroke="#A9C4C4" class="card"/>
+    <text x="42" y="214" class="eyebrow" style="fill:#125563">CODE · NORMAL SHUTDOWN</text>
+    <text x="42" y="236" class="title">Validate and persist</text>
+    <text x="42" y="260" class="body">Check record shape, limits, ownership</text>
+    <text x="42" y="280" class="body">Stamp session ID and timestamp</text>
+  </g>
+
+  <!-- Both storage artifacts are outputs, not sequential stages. -->
+  <path class="connector" d="M200 294 V307 H14 V539"/>
+  <path class="connector" d="M14 381 H26" marker-end="url(#arrow)"/>
+  <path class="connector" d="M14 539 H26" marker-end="url(#arrow)"/>
+  <circle cx="14" cy="381" r="2.5" fill="#62594E"/>
+
+  <g>
+    <rect x="28" y="320" width="344" height="122" rx="8" fill="#FFFFFF" stroke="#DED5C6" class="card"/>
+    <text x="42" y="342" class="eyebrow" style="fill:#62594E">HISTORY</text>
+    <text x="42" y="364" class="title">Session Journal</text>
+    <text x="42" y="388" class="body">Shutdown code appends entries</text>
+    <text x="42" y="408" class="body">Account + accepted record bodies</text>
+    <text x="42" y="428" class="body">Rejected text retained on this path</text>
+  </g>
+
+  <!-- Only journal metadata and pending-item information feed this view. -->
+  <path class="connector" stroke-dasharray="5 5" d="M200 442 V482 H386 V622 H200"/>
+  <text x="214" y="457" class="note">Selection metadata</text>
+  <text x="214" y="475" class="note">+ pending items</text>
+
+  <g>
+    <rect x="28" y="488" width="344" height="102" rx="8" fill="#DCEAE8" stroke="#7FA8A8" class="card"/>
+    <text x="42" y="510" class="eyebrow" style="fill:#0E3B43">CURRENT POSITION</text>
+    <text x="42" y="532" class="title">Continuation Record</text>
+    <text x="42" y="556" class="body">Replace on an accepted write</text>
+    <text x="42" y="576" class="body">One per machine and workstream</text>
+  </g>
+
+  <path class="connector" d="M200 590 V640" marker-end="url(#arrow)"/>
+  <circle cx="200" cy="622" r="2.5" fill="#62594E"/>
+  <text x="190" y="609" class="note" text-anchor="end">Selected record + other</text>
+  <text x="190" y="628" class="note" text-anchor="end">workstream summaries</text>
+
+  <g>
+    <rect x="28" y="640" width="344" height="122" rx="8" fill="#E7F0EF" stroke="#A9C4C4" class="card"/>
+    <text x="42" y="662" class="eyebrow" style="fill:#125563">CODE · GENERATED ON DEMAND</text>
+    <text x="42" y="684" class="title">Generated Startup View</text>
+    <text x="42" y="708" class="body">Selected record + workstream summaries</text>
+    <text x="42" y="728" class="body">Local claims; commits filtered by device</text>
+    <text x="42" y="748" class="body">Section limits; printed, not committed</text>
+  </g>
+  <path class="connector" d="M200 762 V786" marker-end="url(#arrow)"/>
+
+  <g>
+    <rect x="28" y="786" width="344" height="58" rx="8" fill="#F8EFDD" stroke="#D9BE8C" class="card"/>
+    <text x="42" y="808" class="eyebrow" style="fill:#8A5510">MODEL</text>
+    <text x="42" y="830" class="title">Successor coding agent</text>
+  </g>
+
+</svg>

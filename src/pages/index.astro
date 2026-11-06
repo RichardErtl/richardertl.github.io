@@ -1,0 +1,241 @@
+---
+import SessionsChart from '../components/SessionsChart.astro';
+import { site } from '../data/site';
+import Base from '../layouts/Base.astro';
+import { articleHref, articleTypeLabels, getArticles } from '../lib/articles';
+import { getProjects, projectHref, projectStatusLabels } from '../lib/projects';
+
+const topics = ['Architecture', 'Orchestration', 'Evaluation', 'Reliability', 'Observability', 'Workflow optimization'];
+
+const articles = await getArticles();
+const [lead, ...others] = articles;
+
+// Content taken from an article passes the shared draft gate: a production build shows the quote
+// and the matching result only once that article is published. Drafts appear in `astro dev`.
+const quoteSource = articles.find((article) => article.id === site.quote.articleId);
+const results = site.results.filter(
+  (result) => !result.articleId || articles.some((article) => article.id === result.articleId),
+);
+const projects = await getProjects();
+---
+
+<Base current="home">
+  <main id="main">
+    <div class="in">
+      <div class="state">
+        <div>
+          <h1>Building and optimizing <em>agentic software engineering</em> systems</h1>
+          <p>{site.description}</p>
+        </div>
+        <ul class="topics">
+          {topics.map((topic) => <li>{topic}</li>)}
+        </ul>
+      </div>
+    </div>
+
+    <section class="s quote principle">
+      <div class="in">
+        <blockquote>
+          <p>{site.principle}</p>
+          <footer><a href="/about/#how-it-started">How it started &rarr;</a></footer>
+        </blockquote>
+      </div>
+    </section>
+
+    <section class="s journal">
+      <div class="in">
+        <h2 class="sec">Engineering journal</h2>
+        <div class="toc">
+          {
+            lead ? (
+              <a class="lead" href={articleHref(lead)}>
+                <span class="kind">
+                  {articleTypeLabels[lead.data.type]}
+                  {lead.data.draft && <span class="draftmark">Draft</span>}
+                </span>
+                <div class="tx">
+                  <h3>{lead.data.title}</h3>
+                  <p>{lead.data.description}</p>
+                  <span class="more">Read the {articleTypeLabels[lead.data.type].toLowerCase()} &rarr;</span>
+                </div>
+              </a>
+            ) : (
+              <p class="empty">The first article is being prepared.</p>
+            )
+          }
+          {
+            others.map((article) => (
+              <a class="row" href={articleHref(article)}>
+                <span class="kind">
+                  {articleTypeLabels[article.data.type]}
+                  {article.data.draft && <span class="draftmark">Draft</span>}
+                </span>
+                <div class="tx">
+                  <h3>{article.data.title}</h3>
+                </div>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    {
+      quoteSource && (
+        <section class="s quote">
+          <div class="in">
+            <blockquote>
+              <p>{site.quote.text}</p>
+              <footer>
+                From{' '}
+                {quoteSource.data.draft ? (
+                  <cite>{quoteSource.data.title}</cite>
+                ) : (
+                  <a href={articleHref(quoteSource)}>
+                    <cite>{quoteSource.data.title}</cite>
+                  </a>
+                )}
+              </footer>
+            </blockquote>
+          </div>
+        </section>
+      )
+    }
+
+    <section class="s method">
+      <div class="in">
+        <div class="mtext">
+          <h2 class="sec">How I evaluate changes</h2>
+          <p class="mlede">
+            Establish a baseline, change the architecture or workflow, then measure again. Results are reported with
+            their scope and limits, including the targets that were missed.
+          </p>
+          <dl class="res">
+            {
+              results.map((result) => (
+                <div>
+                  <dt>{result.value}</dt>
+                  <dd>{result.label}</dd>
+                  <dd class="scope">{result.scope}</dd>
+                </div>
+              ))
+            }
+          </dl>
+        </div>
+        <figure class="mfig">
+          <SessionsChart />
+          <figcaption>
+            <span><b>{site.figures.sessions}</b> sessions</span>
+            <span><b>{site.figures.spans}</b> telemetry spans</span>
+            <span class="asof">{site.figures.asOf}</span>
+            <span class="cap">
+              Coding sessions per week across my own system, July to November 2026. The final bar covers five days.
+            </span>
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="s projects" id="projects">
+      <div class="in">
+        <h2 class="sec">Selected projects</h2>
+        <div class="proj">
+          {
+            projects.map((project) => {
+              const { name, tagline, summary, status, capabilities, install, links, demo } = project.data;
+              const shot = demo?.screenshots[0];
+              return (
+                <div class:list={['pj', { hud: shot }]}>
+                  <div>
+                    <p class="st">{projectStatusLabels[status]}</p>
+                    <h3>
+                      <a href={projectHref(project)}>{name}</a>
+                    </h3>
+                    <p class="tag">{tagline}</p>
+                    <p>{summary}</p>
+                    {!shot && <ul class="caps">{capabilities.map((capability) => <li>{capability}</li>)}</ul>}
+                    {install && (
+                      <p>
+                        <code>{install}</code>
+                      </p>
+                    )}
+                    {links && (
+                      <p class="ln">
+                        {links.github && <a href={links.github}>GitHub</a>}
+                        {links.npm && <a href={links.npm}>npm</a>}
+                      </p>
+                    )}
+                  </div>
+                  {shot && <img src={shot.src} alt={shot.alt} width={shot.width} height={shot.height} loading="lazy" />}
+                </div>
+              );
+            })
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="s path">
+      <div class="in">
+        <h2 class="sec">From plant monitoring to agent observability</h2>
+        <ol class="tl">
+          <li>
+            <b>2014</b>
+            <h3>Industrial automation</h3>
+            <p>PLC programming and process data capture on the largest production line at MAHLE.</p>
+          </li>
+          <li>
+            <b>2022</b>
+            <h3>BMW Steyr</h3>
+            <p>Tooling to inspect Apache Flink messages on real plant data streams.</p>
+          </li>
+          <li>
+            <b>2023</b>
+            <h3>TalentSpace</h3>
+            <p>Project and technical lead for 14 stations and 200+ active services.</p>
+          </li>
+          <li>
+            <b>2025</b>
+            <h3>MSc, with distinction</h3>
+            <p>Thesis on centralized real-time monitoring for that distributed platform.</p>
+          </li>
+          <li>
+            <b>2026</b>
+            <h3>SystemPrinter and AIHUD</h3>
+            <p>Observability and control for fleets of AI coding agents.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="s research" id="about">
+      <div class="in">
+        <h2 class="sec">Research and background</h2>
+        <div class="rg">
+          <div>
+            <h3>Peer-reviewed publication</h3>
+            <p>
+              <a href={site.links.publication}>Optimizing Parking Efficiency Using Parking Duration Prediction</a>.
+              Applied Sciences 16(13), 2026.
+            </p>
+          </div>
+          <div>
+            <h3>Education</h3>
+            <p>
+              MSc Mobile Computing and BSc Automotive Computing, University of Applied Sciences Upper Austria, Hagenberg.
+              Both with distinction.
+            </p>
+          </div>
+          <div>
+            <h3>Contact</h3>
+            <p class="cl">
+              <a href={site.links.github}>GitHub</a>
+              <a href={site.links.linkedin}>LinkedIn</a>
+              <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</Base>

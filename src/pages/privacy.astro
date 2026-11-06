@@ -1,0 +1,86 @@
+---
+import { site } from '../data/site';
+import Base from '../layouts/Base.astro';
+
+const email = site.contact.email;
+const githubPrivacy = 'https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement';
+const googlePrivacy = 'https://policies.google.com/privacy';
+const dpfList = 'https://www.dataprivacyframework.gov/list';
+const adequacyDecision = 'https://eur-lex.europa.eu/eli/dec_impl/2023/1795/oj';
+const authority = 'https://www.dsb.gv.at/';
+---
+
+<Base title="Privacy" noindex>
+  <main id="main" class="in stub">
+    <h1>Privacy</h1>
+    <div class="prose">
+      <p>
+        This site sets no cookies, uses no analytics or tracking, and has no embedded third-party content. Fonts, images
+        and video come from the same host as the pages. Two things still involve personal data: hosting, and any email
+        you send me.
+      </p>
+
+      <h2>Who is responsible</h2>
+      <p>
+        {site.name}, Linz, Austria. Email: <a href={`mailto:${email}`}>{email}</a>.
+        You can also reach me on <a href={site.links.linkedin}>LinkedIn</a>.
+      </p>
+
+      <h2>Hosting</h2>
+      <p>
+        This site is hosted on GitHub Pages, a service of GitHub, and delivered through the Fastly content delivery
+        network. To show you a page, these services process technical data such as your IP address, the page requested
+        and the time of the request. GitHub states that it logs each visitor's IP address for security purposes, whether
+        or not the visitor has a GitHub account. I do not receive these logs. GitHub does not publish how long it keeps
+        them. See the <a href={githubPrivacy}>GitHub Privacy Statement</a>.
+      </p>
+      <p>The legal basis is Art. 6(1)(f) GDPR. The legitimate interest is delivering this site reliably and securely.</p>
+
+      <h2>Transfer to the United States</h2>
+      <p>
+        GitHub, Inc. is based in the United States, so your data may be processed there. GitHub states that it complies
+        with the <a href={dpfList}>EU-U.S. Data Privacy Framework</a>, which is covered by the European Commission's
+        adequacy decision <a href={adequacyDecision}>(EU) 2023/1795</a>, and that it also relies on the Commission's
+        standard contractual clauses.
+      </p>
+
+      <h2>Email</h2>
+      <p>
+        If you email me, I process your address, your message and any details you include, in order to reply. The legal
+        basis is Art. 6(1)(f) GDPR, my legitimate interest in answering you, or Art. 6(1)(b) GDPR if your message
+        concerns a possible job or contract.
+      </p>
+      <p>
+        My mailbox is hosted by Gmail, a service of Google Ireland Limited, Gordon House, Barrow Street, Dublin 4,
+        Ireland, which handles this data under the <a href={googlePrivacy}>Google Privacy Policy</a>. I delete messages
+        no later than 12 months after our last contact, unless they are part of an employment relationship or I need
+        them for a legal claim.
+      </p>
+
+      <h2>Your rights</h2>
+      <p>
+        You can ask me for access to your data, and for its rectification, erasure, restriction or transfer. A short
+        email is enough. I can only act on data I hold, which means your emails and not GitHub's logs. For those, please
+        contact GitHub.
+      </p>
+      <p>Where I rely on legitimate interests, you can ask how I weighed them against your interests.</p>
+      <p>
+        <strong>Right to object:</strong> you can object at any time to processing based on Art. 6(1)(f) GDPR, on grounds
+        relating to your particular situation.
+      </p>
+      <p>
+        You can complain to the Austrian Data Protection Authority (Österreichische Datenschutzbehörde), Barichgasse
+        40-42, 1030 Vienna, <a href="mailto:dsb@dsb.gv.at">dsb@dsb.gv.at</a>, <a href={authority}>dsb.gv.at</a>, or to the
+        authority where you live or work.
+      </p>
+
+      <h2>Other notes</h2>
+      <p>
+        You do not have to give me any data to read this site, though the technical data above is needed to deliver it.
+        If you want a reply, I need your email address. I make no automated decisions about you. Links to other sites
+        send nothing until you click them; those sites then apply their own privacy rules.
+      </p>
+      <p>Last updated: November 6, 2026</p>
+    </div>
+  </main>
+</Base>

@@ -1,0 +1,120 @@
+---
+import { getEntry, render } from 'astro:content';
+import { site } from '../../data/site';
+import Base from '../../layouts/Base.astro';
+import { articleHref, articleTypeLabels, getArticles } from '../../lib/articles';
+import { getProjects, projectStatusLabels, type Project } from '../../lib/projects';
+
+export async function getStaticPaths() {
+  const projects = await getProjects();
+  return projects.map((project) => ({ params: { slug: project.id }, props: { project } }));
+}
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+const { name, tagline, summary, status, technologies, capabilities, install, links, demo, relatedArticles, siteFigures } =
+  project.data;
+const { Content } = await render(project);
+
+// A mistyped slug only logs an error in Astro, so it is made fatal here.
+for (const reference of relatedArticles) {
+  if (!(await getEntry(reference))) throw new Error(`${name}: unknown related article "${reference.id}"`);
+}
+
+// Runs through the shared draft gate, so a production build lists published articles only.
+const relatedIds = relatedArticles.map((article) => article.id);
+const related = (await getArticles()).filter((article) => relatedIds.includes(article.id));
+---
+
+<Base title={name} description={summary} current="projects">
+  <main id="main" class="in">
+    <article>
+      <div class="ahead">
+        <p class="kind">{projectStatusLabels[status]}</p>
+        <h1>{name}</h1>
+        <p class="desc">{tagline}</p>
+      </div>
+      {
+        siteFigures && (
+          <p class="panel">
+            <span>
+              <b>{site.figures.sessions}</b> sessions
+            </span>
+            <span>
+              <b>{site.figures.spans}</b> telemetry spans
+            </span>
+            <span class="asof">{site.figures.asOf}</span>
+          </p>
+        )
+      }
+      {
+        (install || links) && (
+          <p class="pfacts">
+            {install && <code>{install}</code>}
+            {links?.github && <a href={links.github}>GitHub</a>}
+            {links?.npm && <a href={links.npm}>npm</a>}
+          </p>
+        )
+      }
+      {
+        demo?.video && (
+          <figure class="demo">
+            <video
+              controls
+              preload="none"
+              playsinline
+              poster={demo.video.poster}
+              width={demo.video.width}
+              height={demo.video.height}
+              aria-label={demo.video.label}
+            >
+              <source src={demo.video.src} type="video/mp4" />
+              <a href={demo.video.src}>{demo.video.label}</a>
+            </video>
+            {demo.video.caption && <figcaption>{demo.video.caption}</figcaption>}
+          </figure>
+        )
+      }
+      <div class="prose">
+        <Content />
+      </div>
+      {
+        demo && demo.screenshots.length > 0 && (
+          <div class="shots">
+            {demo.screenshots.map((shot) => (
+              <img src={shot.src} alt={shot.alt} width={shot.width} height={shot.height} loading="lazy" />
+            ))}
+          </div>
+        )
+      }
+      <div class="pmeta">
+        <div>
+          <h2>Capabilities</h2>
+          <ul class="caps">{capabilities.map((capability) => <li>{capability}</li>)}</ul>
+        </div>
+        <div>
+          <h2>Technologies</h2>
+          <ul class="caps">{technologies.map((technology) => <li>{technology}</li>)}</ul>
+        </div>
+        {
+          related.length > 0 && (
+            <div>
+              <h2>Related articles</h2>
+              <ul class="plain">
+                {related.map((article) => (
+                  <li>
+                    <a href={articleHref(article)}>{article.data.title}</a> ({articleTypeLabels[article.data.type]})
+                    {article.data.draft && <span class="draftmark">Draft</span>}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )
+        }
+      </div>
+    </article>
+  </main>
+</Base>

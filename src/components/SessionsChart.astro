@@ -1,0 +1,82 @@
+---
+import weeks from '../data/sessions-weekly.json';
+
+const date = (iso: string, format: Intl.DateTimeFormatOptions) =>
+  new Date(`${iso}T00:00:00Z`).toLocaleDateString('en-US', { ...format, timeZone: 'UTC' });
+const day = (iso: string) => date(iso, { day: 'numeric', month: 'short' });
+const month = (iso: string) => date(iso, { month: 'short', year: 'numeric' });
+
+const first = weeks[0]!;
+const last = weeks[weeks.length - 1]!;
+const peak = Math.max(...weeks.map((week) => week.sessions));
+const label =
+  `Bar chart of sessions started per week, from ${date(first.from, { day: 'numeric', month: 'long' })} ` +
+  `to ${date(last.to, { day: 'numeric', month: 'long', year: 'numeric' })}. ` +
+  `The busiest week had ${peak} sessions.`;
+
+function variant(cls: string, w: number, h: number, gap: number) {
+  const top = 30;
+  const bottom = 26;
+  const radius = 2;
+  const plot = h - top - bottom;
+  const baseline = top + plot;
+  const barWidth = (w - gap * (weeks.length - 1)) / weeks.length;
+
+  const bars = weeks.map((week, i) => {
+    const x = i * (barWidth + gap);
+    const height = Math.max(2, (week.sessions / peak) * plot);
+    const y = baseline - height;
+    const r = Math.min(radius, height);
+    const [x0, x1] = [x.toFixed(1), (x + barWidth).toFixed(1)];
+    const d =
+      `M${x0} ${baseline}V${(y + r).toFixed(1)}Q${x0} ${y.toFixed(1)} ${(x + r).toFixed(1)} ${y.toFixed(1)}` +
+      `H${(x + barWidth - r).toFixed(1)}Q${x1} ${y.toFixed(1)} ${x1} ${(y + r).toFixed(1)}V${baseline}Z`;
+    return { d, peak: week.sessions === peak, title: `Week of ${day(week.from)}: ${week.sessions} sessions` };
+  });
+
+  const peakCentre = weeks.findIndex((week) => week.sessions === peak) * (barWidth + gap) + barWidth / 2;
+  return { cls, w, h, top, bars, lineY: baseline + 0.5, peakX: Math.min(peakCentre, w - 56).toFixed(1) };
+}
+
+const variants = [variant('cd', 620, 300, 4), variant('cm', 260, 170, 3)];
+---
+
+{
+  variants.map((v) => (
+    <svg class={`chart ${v.cls}`} viewBox={`0 0 ${v.w} ${v.h}`} role="img" aria-label={label}>
+      {v.bars.map((bar) => (
+        <path class:list={['bar', { peak: bar.peak }]} d={bar.d}>
+          <title>{bar.title}</title>
+        </path>
+      ))}
+      <line class="base" x1="0" x2={v.w} y1={v.lineY} y2={v.lineY} />
+      <text class="peaklabel" x={v.peakX} y={v.top - 10} text-anchor="middle">
+        {peak} in one week
+      </text>
+      <text class="axis" x="0" y={v.h - 6}>
+        {month(first.from)}
+      </text>
+      <text class="axis" x={v.w} y={v.h - 6} text-anchor="end">
+        {month(last.to)}
+      </text>
+    </svg>
+  ))
+}
+<table class="visually-hidden">
+  <caption>Coding sessions per week</caption>
+  <thead>
+    <tr><th scope="col">Period</th><th scope="col">Sessions</th></tr>
+  </thead>
+  <tbody>
+    {
+      weeks.map((week) => (
+        <tr>
+          <th scope="row">
+            {day(week.from)} to {day(week.to)}
+          </th>
+          <td>{week.sessions}</td>
+        </tr>
+      ))
+    }
+  </tbody>
+</table>

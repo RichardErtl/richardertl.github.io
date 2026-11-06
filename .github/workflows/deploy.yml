@@ -1,0 +1,47 @@
+# Inert until started by hand. There is deliberately no push trigger.
+name: Deploy to GitHub Pages
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      # Repository variable, required here. A local build without it stays private.
+      SITE_URL: ${{ vars.SITE_URL }}
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v7
+      - name: Refuse an incomplete release
+        run: |
+          if [ -z "$SITE_URL" ]; then
+            echo "::error::Set the repository variable SITE_URL."
+            exit 1
+          fi
+          if grep -l 'Placeholder\.' src/pages/legal-notice.astro src/pages/privacy.astro; then
+            echo "::error::The legal pages still hold placeholder text."
+            exit 1
+          fi
+      - name: Build with Astro
+        uses: withastro/action@v6
+        with:
+          node-version: 24
+          package-manager: pnpm@11.0.8
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

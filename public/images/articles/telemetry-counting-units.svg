@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="834" viewBox="0 0 400 834" style="display:block;max-width:100%;height:auto" role="img" aria-labelledby="telemetry-title telemetry-desc">
+  <title id="telemetry-title">Counting units and reconstructed ownership in one historical telemetry session</title>
+  <desc id="telemetry-desc">Deduplicating 631 raw telemetry lines yields 315 unique spans. Filtering those spans yields 311 recorded tool-call spans, all originally labeled conductor-owned. Ownership reconstruction assigns 39 to the conductor and 272 to workers. The 272 worker-owned tool-call spans were therefore misattributed: 272 divided by 311 is approximately 87.5 percent. This reconstruction concerns one historical session.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="7" markerHeight="7" refX="7" refY="3.5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0 0 L7 3.5 L0 7 Z" fill="#62594E"/>
+    </marker>
+    <style>
+      text { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; fill: #29221B; font-variant-numeric: tabular-nums; }
+      .eyebrow { font-size: 12.5px; font-weight: 650; letter-spacing: 1px; }
+      .heading { font-size: 19px; font-weight: 650; letter-spacing: -0.3px; }
+      .title { font-size: 18px; font-weight: 650; letter-spacing: -0.2px; }
+      .body { font-size: 15px; font-weight: 400; }
+      .note { font-size: 14.5px; font-weight: 400; fill: #62594E; }
+      .count { font-size: 34px; font-weight: 700; letter-spacing: -1px; }
+      .op { font-size: 14.5px; font-weight: 500; fill: #62594E; }
+      .card { stroke-width: 1; }
+      .connector { fill: none; stroke: #62594E; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+  </defs>
+
+  <rect width="400" height="834" fill="#FDFAF3"/>
+
+  <text class="eyebrow" x="20" y="32" style="fill:#62594E">COUNTING UNITS</text>
+  <text class="heading" x="20" y="60">Counting one session</text>
+  <text class="note" x="20" y="86">Each step changes what is counted.</text>
+  <g transform="translate(0,-20)">
+
+  <g aria-label="631 raw telemetry lines">
+    <rect x="20" y="126" width="360" height="64" rx="8" fill="#FFFFFF" stroke="#DED5C6" class="card"/>
+    <text class="count" x="36" y="169" style="fill:#62594E">631</text>
+    <text class="title" x="112" y="168">raw telemetry lines</text>
+  </g>
+
+  <g aria-label="Deduplicate by span">
+    <path class="connector" d="M44 190 V230" marker-end="url(#arrow)"/>
+    <text class="op" x="62" y="215">Deduplicate by span</text>
+  </g>
+
+  <g aria-label="315 unique spans">
+    <rect x="20" y="230" width="360" height="64" rx="8" fill="#FFFFFF" stroke="#DED5C6" class="card"/>
+    <text class="count" x="36" y="273" style="fill:#62594E">315</text>
+    <text class="title" x="112" y="272">unique spans</text>
+  </g>
+
+  <g aria-label="Filter to recorded tool-call spans">
+    <path class="connector" d="M44 294 V334" marker-end="url(#arrow)"/>
+    <text class="op" x="62" y="319">Keep tool-call spans</text>
+  </g>
+
+  <g aria-label="311 recorded tool-call spans, all originally labeled conductor-owned">
+    <rect x="20" y="334" width="360" height="130" rx="8" fill="#FFFFFF" stroke="#DED5C6" class="card"/>
+    <text class="count" x="36" y="388" style="fill:#62594E">311</text>
+    <text class="title" x="112" y="368">recorded</text>
+    <text class="title" x="112" y="388">tool-call spans</text>
+    <path d="M36 404 H364" stroke="#DED5C6" stroke-width="1"/>
+    <text class="eyebrow" x="36" y="426" style="fill:#62594E">ORIGINAL OWNERSHIP</text>
+    <text class="body" x="36" y="448">All 311 labeled conductor</text>
+  </g>
+
+  <g aria-label="Reconstruct ownership">
+    <path class="connector" d="M44 464 V504" marker-end="url(#arrow)"/>
+    <text class="op" x="62" y="489">Reconstruct ownership</text>
+  </g>
+
+  <text class="title" x="20" y="532">Reconstructed ownership</text>
+
+  <g aria-label="39 conductor tool-call spans">
+    <rect x="20" y="556" width="174" height="88" rx="8" fill="#E7F0EF" stroke="#A9C4C4" class="card"/>
+    <text class="count" x="36" y="600" style="fill:#125563">39</text>
+    <text class="title" x="36" y="626">conductor</text>
+  </g>
+  <g aria-label="272 worker tool-call spans">
+    <rect x="206" y="556" width="174" height="88" rx="8" fill="#DCEAE8" stroke="#7FA8A8" class="card"/>
+    <text class="count" x="222" y="600" style="fill:#0E3B43">272</text>
+    <text class="title" x="222" y="626">workers</text>
+  </g>
+
+  <g aria-label="272 of 311 recorded tool-call spans, approximately 87.5 percent, were misattributed by reconstruction">
+    <rect x="20" y="672" width="360" height="130" rx="8" fill="#FFFFFF" stroke="#DED5C6" class="card"/>
+    <text class="eyebrow" x="36" y="698" style="fill:#0E3B43">MISATTRIBUTED SPANS</text>
+    <text class="count" x="36" y="738" style="fill:#0E3B43">272 / 311</text>
+    <text class="count" x="36" y="778" style="fill:#0E3B43">≈ 87.5%</text>
+  </g>
+
+  <text class="note" x="20" y="832">One historical session only.</text>
+  </g>
+</svg>
