@@ -129,7 +129,7 @@ const projects = await getProjects();
             <span><b>{site.figures.spans}</b> telemetry spans</span>
             <span class="asof">{site.figures.asOf}</span>
             <span class="cap">
-              Coding sessions per week across my own system, July to November 2026. The final bar covers five days.
+              Coding sessions per week across my own system, July to November 2026. Full weeks through 14 November.
             </span>
           </figcaption>
         </figure>
@@ -141,31 +141,51 @@ const projects = await getProjects();
         <h2 class="sec">Selected projects</h2>
         <div class="proj">
           {
-            projects.map((project) => {
+            projects.map((project, index) => {
               const { name, tagline, summary, status, capabilities, install, links, demo } = project.data;
               const shot = demo?.screenshots[0];
+              // The first two projects share the row. A later one spans it, head left and body right.
+              const wide = index >= 2;
+              const head = (
+                <>
+                  <p class="st">{projectStatusLabels[status]}</p>
+                  <h3>
+                    <a href={projectHref(project)}>{name}</a>
+                  </h3>
+                  <p class="tag">{tagline}</p>
+                </>
+              );
+              const body = (
+                <>
+                  <p>{summary}</p>
+                  {!shot && <ul class="caps">{capabilities.map((capability) => <li>{capability}</li>)}</ul>}
+                  {install && (
+                    <p>
+                      <code>{install}</code>
+                    </p>
+                  )}
+                  {links && (
+                    <p class="ln">
+                      {links.github && <a href={links.github}>GitHub</a>}
+                      {links.npm && <a href={links.npm}>npm</a>}
+                      {links.website && <a href={links.website}>Visit {name}</a>}
+                    </p>
+                  )}
+                </>
+              );
               return (
-                <div class:list={['pj', { hud: shot }]}>
-                  <div>
-                    <p class="st">{projectStatusLabels[status]}</p>
-                    <h3>
-                      <a href={projectHref(project)}>{name}</a>
-                    </h3>
-                    <p class="tag">{tagline}</p>
-                    <p>{summary}</p>
-                    {!shot && <ul class="caps">{capabilities.map((capability) => <li>{capability}</li>)}</ul>}
-                    {install && (
-                      <p>
-                        <code>{install}</code>
-                      </p>
-                    )}
-                    {links && (
-                      <p class="ln">
-                        {links.github && <a href={links.github}>GitHub</a>}
-                        {links.npm && <a href={links.npm}>npm</a>}
-                      </p>
-                    )}
-                  </div>
+                <div class:list={['pj', { hud: shot, wide }]}>
+                  {wide ? (
+                    <>
+                      <div>{head}</div>
+                      <div>{body}</div>
+                    </>
+                  ) : (
+                    <div>
+                      {head}
+                      {body}
+                    </div>
+                  )}
                   {shot && <img src={shot.src} alt={shot.alt} width={shot.width} height={shot.height} loading="lazy" />}
                 </div>
               );

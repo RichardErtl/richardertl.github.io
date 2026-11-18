@@ -31,8 +31,8 @@ export const site = {
   ],
 
   figures: {
-    sessions: '1,400+',
-    spans: '350,000+',
+    sessions: '2,000+',
+    spans: '440,000+',
     asOf: 'As of November 2026',
   },
 

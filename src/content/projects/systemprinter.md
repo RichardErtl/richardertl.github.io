@@ -24,7 +24,7 @@ relatedArticles:
 
 SystemPrinter is a private system. It is not a downloadable product.
 
-I design and operate it myself and use it daily on real coding work. It explores a shift from direct interaction with individual coding agents toward a higher layer of orchestration, control, observability, and decisions. This page covers the concepts and the lessons. The implementation stays private.
+I design and operate it myself and use it daily on real coding work. One example is [EDULINI](/projects/edulini/), a learning platform in classroom use, whose most recent exercise format was built through it. It explores a shift from direct interaction with individual coding agents toward a higher layer of orchestration, control, observability, and decisions. This page covers the concepts and the lessons. The implementation stays private.
 
 ## Concepts
 

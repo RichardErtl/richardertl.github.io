@@ -1518,3 +1518,26 @@ body > main {
 .story li {
   margin-bottom:.25em;
 }
+
+/* A third project spans the row: head in the first column, body in the second. */
+.proj .pj.wide {
+  grid-column:1 / -1;
+  display:grid;
+  grid-template-columns:1fr 1.2fr;
+  gap:44px;
+  padding-top:40px;
+  border-top:1px solid var(--gold2);
+}
+.proj .pj.wide .caps {
+  margin-top:0;
+}
+@media (max-width:860px) {
+  .proj .pj.wide {
+    grid-template-columns:1fr;
+    gap:0;
+    padding-top:34px;
+  }
+}
+.proj .caps + .ln {
+  margin-top:18px;
+}

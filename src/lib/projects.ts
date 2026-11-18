@@ -5,6 +5,7 @@ export type Project = CollectionEntry<'projects'>;
 export const projectStatusLabels: Record<Project['data']['status'], string> = {
   private: 'Private system',
   'open-source': 'Open source',
+  product: 'Product in classroom use',
 };
 
 export const projectHref = (project: Project) => `/projects/${project.id}/`;

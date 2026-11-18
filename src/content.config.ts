@@ -37,7 +37,7 @@ const projects = defineCollection({
     name: z.string().min(1),
     tagline: z.string().min(1),
     summary: z.string().min(1),
-    status: z.enum(['private', 'open-source']),
+    status: z.enum(['private', 'open-source', 'product']),
     order: z.number().int(),
     technologies: z.array(z.string()),
     capabilities: z.array(z.string()),
@@ -47,6 +47,7 @@ const projects = defineCollection({
       .object({
         github: z.url().optional(),
         npm: z.url().optional(),
+        website: z.url().optional(),
       })
       .optional(),
     demo: z
